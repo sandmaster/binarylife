@@ -10,6 +10,7 @@ class PlayerTest {
 	@BeforeEach
 	void setup() {
 		Player mockPlayer = new Player();
+		mockPlayer.init();
 
 	}
 
