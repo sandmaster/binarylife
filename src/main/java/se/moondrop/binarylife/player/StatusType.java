@@ -22,6 +22,9 @@ public class StatusType {
         this.amount = 0;
     }
 
+    public StatusType() {
+    }
+
     public String getName() {
         return this.name;
     }

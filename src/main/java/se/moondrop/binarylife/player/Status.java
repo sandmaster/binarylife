@@ -100,7 +100,7 @@ public class Status {
         StringBuilder tableBuilder = new StringBuilder();
 
         for (StatusType type : fields) {
-            tableBuilder.append(type.getName() + ": " + type.getAmount() + "\n");
+            tableBuilder.append(type.toString() + "\n");
         }
 
         return tableBuilder.toString();

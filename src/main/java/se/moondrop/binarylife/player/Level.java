@@ -2,6 +2,8 @@ package se.moondrop.binarylife.player;
 
 import org.springframework.stereotype.Component;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 /**
  * Represents a Level object, which handles everything to do with experience
  * recieved, automatically levels up hen required
@@ -16,13 +18,15 @@ public class Level {
     private long experienceCurrentLevel;
     private long experienceToNextLevel;
 
+    private static final double LEVEL_UP_MULTIPLICATION = 1.1;
+
     /**
      * Init initializes the Level object and sets its default values.
      */
     public void init() {
         currentLevel = 0;
         experienceCurrentLevel = 0l;
-        experienceToNextLevel = 0l;
+        experienceToNextLevel = 100l;
     }
 
     /**
@@ -33,9 +37,23 @@ public class Level {
      * @param overflow number of experience over the cap before the next level
      */
     private void levelUp(long overflow) {
+
         currentLevel++;
+        System.out.println("Congratulations, you have leveled up. Level " + currentLevel);
         experienceCurrentLevel = overflow;
-        experienceToNextLevel *= 2;
+        experienceToNextLevel *= LEVEL_UP_MULTIPLICATION;
+
+        while (overflow >= experienceToNextLevel) {
+            currentLevel++;
+            System.out.println("Congratulations, you have leveled up. Level " + currentLevel);
+
+            overflow -= experienceToNextLevel;
+            experienceCurrentLevel = overflow;
+
+            experienceToNextLevel *= LEVEL_UP_MULTIPLICATION;
+
+        }
+
     }
 
     /**
@@ -48,7 +66,7 @@ public class Level {
     private void levelUp() {
         currentLevel++;
         experienceCurrentLevel = 0l;
-        experienceToNextLevel *= 2;
+        experienceToNextLevel *= LEVEL_UP_MULTIPLICATION;
     }
 
     /**

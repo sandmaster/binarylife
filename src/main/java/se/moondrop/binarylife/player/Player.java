@@ -18,15 +18,16 @@ import org.springframework.stereotype.Component;
 public class Player {
 
 	private String name;
-	private int age;
 	private int weight;
 	private Level level;
 	private Status status;
 
-	public Player(String name, int age, int weight) {
+	public Player(String name, int weight) {
 		this.name = name;
-		this.age = age;
 		this.weight = weight;
+	}
+
+	public Player() {
 	}
 
 	/**
@@ -44,9 +45,6 @@ public class Player {
 
 	}
 
-	public int getAge() {
-		return age;
-	}
 
 	public int getWeight() {
 		return weight;
@@ -60,11 +58,11 @@ public class Player {
 		return level.getLevel();
 	}
 
-	public long getCurrentExperience(){
+	public long getCurrentExperience() {
 		return level.getCurrentExperience();
 	}
 
-	public long getExperienceForLevelUp(){
+	public long getExperienceForLevelUp() {
 		return level.getExperienceToNextLevel();
 	}
 
@@ -74,8 +72,9 @@ public class Player {
 
 	@Override
 	public String toString() {
-		
-		return "Name: " + name + "\nAge: " + age + "\nWeight: " + weight + "\nLevel: " + getPlayerLevel()
-				+ "\nExperience: " + getCurrentExperience() +"/"+getExperienceForLevelUp()+"\n"+status.toString();
+
+		return "Name: " + name + "\nWeight: " + weight + "\nLevel: " + getPlayerLevel()
+				+ "\nExperience: " + getCurrentExperience() + "/" + getExperienceForLevelUp() + "\n"
+				+ status.toString();
 	}
 }
