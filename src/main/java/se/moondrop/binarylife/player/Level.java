@@ -2,8 +2,6 @@ package se.moondrop.binarylife.player;
 
 import org.springframework.stereotype.Component;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-
 /**
  * Represents a Level object, which handles everything to do with experience
  * recieved, automatically levels up hen required

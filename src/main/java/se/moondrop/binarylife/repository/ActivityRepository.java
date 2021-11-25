@@ -1,0 +1,98 @@
+package se.moondrop.binarylife.repository;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import org.springframework.stereotype.Repository;
+import se.moondrop.binarylife.manager.DatabaseManager;
+import se.moondrop.binarylife.training.Activity;
+
+/**
+ * Class for handing storing and retrieval of activities from the database
+ */
+@Repository
+public class ActivityRepository {
+
+	DatabaseManager databaseManager;
+	Connection connection;
+
+	public ActivityRepository() {
+
+		try {
+			init();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Initialize the tables being used for this service; activity
+	 * @throws SQLException if the database access sends an error, or this method is called on a closed connection
+	 */
+	public void init() throws SQLException {
+		databaseManager = new DatabaseManager();
+		connection = databaseManager.getConnection();
+		Statement statement = connection.createStatement();
+		statement.execute("CREATE TABLE IF NOT EXISTS activity (id INTEGER PRIMARY KEY, name TEXT NOT NULL, description TEXT, remValue REAL NOT NULL");
+		statement.close();
+		connection.close();
+	}
+
+	/**
+	 * Method to store an activity into the database, by sending the values as arguments
+	 * @param name the name of the activity
+	 * @param description the description of the activity
+	 * @param remValue the rem value of the exercise
+	 * @throws SQLException if the database access sends an error, or this method is called on a closed connection
+	 */
+	public void storeActivity(String name, String description, double remValue) throws SQLException {
+
+		if(description.isBlank()){
+			description = "No description for this activity has been put";
+		}
+
+		connection = databaseManager.getConnection();
+		Statement statement = connection.createStatement();
+		statement.execute("INSERT INTO activity VALUES ("+name+", " + description + ", " + remValue);
+		statement.close();
+		connection.close();
+	}
+
+	/**
+	 * Method for retrieving a row (activity) from the database
+	 * @param name the name of the activity to be retrieved
+	 * @return the result from the query being made
+	 * @throws SQLException if the database access sends an error, or this method is called on a closed connection
+	 */
+	public Activity retrieveActivity(String name) throws SQLException {
+		Activity activity = new Activity();
+
+		connection = databaseManager.getConnection();
+		Statement statement = connection.createStatement();
+		statement.execute("SELECT * FROM activity WHERE name = '" + name + "'");
+		ResultSet result = statement.getResultSet();
+
+		if (result == null) {
+			System.out.println("The resulting query failed...");
+		} else {
+			try {
+				while (result.next()) {
+					activity.setName(result.getString("name"));
+					activity.setDescription(result.getString("description"));
+					activity.setRemValue(result.getDouble("remValue"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		result.close();
+		statement.close();
+		connection.close();
+
+		return activity;
+	}
+
+}

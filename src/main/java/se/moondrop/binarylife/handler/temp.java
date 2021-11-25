@@ -1,17 +1,12 @@
 package se.moondrop.binarylife.handler;
 
 import se.moondrop.binarylife.training.Activity;
-import se.moondrop.binarylife.user.User;
 
 public interface temp {
 
     public void calculateExperience(Activity training, int time);
 
     public void addExperienceToPlayer(long experience);
-
-    public User retrieveUser(String id);
-
-    public void storeUser(String id, String username, String password);
 
     public void updatePlayerStatus(String statusFieldName, int amount);
 

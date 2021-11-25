@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="60">
+    <Appenders>
+        <Console name="Console-Appender" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>>
+            </PatternLayout>
+        </Console>
+        
+            <RollingFile name="RollingFile-Appender"
+                     fileName="binarylife.log"
+                     immediateFlush="true" 
+                     append="true"
+                     filePattern="binarylife.log.%d{yyyy-MM-dd}.gz">
+ 			<PatternLayout pattern="[%-5level{WARN=Warning, DEBUG=Debug, ERROR=Error, TRACE=Trace, INFO=Info}] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
+ 			  <Filters>
+			
+			        <!-- First deny warn, error and fatal messages -->
+			        <ThresholdFilter level="error"  onMatch="DENY" onMismatch="NEUTRAL"/>
+		
+			        <!-- Then accept info, warn, error, fatal and deny debug/trace -->
+<!-- 			        <ThresholdFilter level="info"  onMatch="ACCEPT" onMismatch="DENY"/> -->
+			    </Filters>
+                 <Policies>
+                     <SizeBasedTriggeringPolicy size="50 MB"/>
+                </Policies>
+                     <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        
+         <RollingFile name="RollingFileError-Appender"
+                     fileName="binarylife-error.log"
+                     immediateFlush="true" 
+                     append="true"
+                     filePattern="binarylife-error.log.%d{yyyy-MM-dd}.gz">
+ 			<PatternLayout pattern="[%-5level{WARN=Warning, DEBUG=Debug, ERROR=Error, TRACE=Trace, INFO=Info}] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
+                 <Policies>
+                     <SizeBasedTriggeringPolicy size="50 MB"/>
+                </Policies>
+                     <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        
+    </Appenders>
+    <Loggers>
+
+           <Logger name="ErrorLogger" level="error" additivity="false">
+           	   <AppenderRef ref="RollingFileError-Appender" level="error"/>
+           </Logger>
+
+           <Logger name="se.moondrop.binarylife" level="INFO" additivity="false">
+           		<AppenderRef ref="RollingFile-Appender" level="INFO"/>
+           		<AppenderRef ref="RollingFileError-Appender" level="ERROR"/>
+           </Logger>
+           
+        <Root level="error">
+            <AppenderRef ref="Console-Appender"/>
+        </Root>
+    </Loggers>
+</Configuration>
